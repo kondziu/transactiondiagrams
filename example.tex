@@ -1,0 +1,140 @@
+\documentclass{minimal}
+
+% Transactiondiagram requires Tikz.
+\usepackage{tikz}
+
+% Tikz libraries used by transactiondiagram.
+\usetikzlibrary{arrows,backgrounds,calc,decorations.pathmorphing,fit,shapes.geometric,matrix,shapes,patterns,positioning}
+
+\usepackage{transactiondiagram}
+
+\begin{document}
+
+\begin{tikzpicture}
+     % Transaction, basically a line starting at point (0,0) and ending at
+     % point (5,0). It contains four operations.
+     \draw
+           % First operation in the transaction. Each operation contains at
+           % least two nodes. The first one (aop) is the label above the node.
+           % It says what type of operation this is (here: start). 
+           (0,0) node[aop]      {$\mathit{start}_i$}
+
+           % The second one is the symbol that represents the operation on the
+           % line. This is a white circle in the case of dot.
+                 node[dot]      {} 
+
+           % The third node is only present in the first node of each
+           % transaction and contains the label that is typeset on the left of
+           % the transaction. It names the transaction as Ti.
+                 node[tid]      {$T_i$}
+
+           % There is a line from the first to the second oepration, indicated
+           % --. If -- was not here, there would be no line drawn between the
+           % operations. The operation will appear 1 unit to the east of the
+           % first operation. This operation is typical, in that it has two
+           % nodes.
+      -- ++(1,0) node[aop]      {$r_i(x)u_i$}
+                 node[dot]      {}
+
+           % The third operation is split into an invocation and a response.
+           % This means that there will be a separate point for the invocation
+           % and a separate one for the response. The invocation will be denoted
+           % on the line as a half circle, so we use inv instead of dot.
+           % We name the point on the line as in, by giving this label in the
+           % parentheses.
+      -- ++(1,0) node[aop]      {$w_i(x)v_i$}
+                 node[inv] (in) {}
+
+            % The response is one unit to the east of the invocation. We do not
+            % draw a line between the invocation and the response, because we
+            % will fill the gap later with a dashed line. The response is also
+            % a half circle, so we use res instead of dot. We name the point on
+            % the line as re.
+         ++(1,0) node[aop]      {$\to\!\mathit{ok}_i$}
+                 node[res] (re) {}
+
+            % The last operation is also typical.
+      -- ++(1,0) node[aop]      {$\mathit{tryC}_i$}
+                 node[dot]      {}         
+                 ;
+
+    % Next, we fill the gap between the invocation event at node in and the
+    % response event at node re using the wait-style line.
+    \draw[wait] (in) -- (re);
+
+    % Another transaction, it starts at point (4,-1), so below and to the east
+    % of where the previous transaction started.
+    \draw
+          (4,-1) node[aop]      {$\mathit{start}_j$}
+                 node[dot]      {} 
+                 node[tid]      {$T_j$}
+
+      -- ++(1,0) node[aop]      {$r_j(x)$}
+                 node[inv] (in2){}
+
+         ++(1,0) node[aop]      {$\to\!v_j$}
+                 node[res] (re2){}
+
+      -- ++(1.5,0) node[aop]    {$\mathit{tryC}_j$}
+                 node[dot] (ab) {}         
+                 ;
+
+    % A dashed line between two events of a split operation
+    \draw[wait] (in2) -- (re2);
+
+    % We draw a happens-before arrow between the invocation events of the two
+    % transactions. The line is of class hb and is defined by the command
+    % \squiggle.
+    \draw[hb] (in) \squiggle (in2);
+
+    % Next we draw another transaction in the same line as the previous one
+    \draw
+          (9,-1) node[aop]      {$\mathit{start}_j'$}
+                 node[dot] (st) {} 
+                 node[tid]      {$T_j'$}
+
+
+      -- ++(1,0) node[aop]      {$r_j'(x)v_k$}
+                 node[dot] (r)  {}
+
+      -- ++(1,0) node[aop]      {$\mathit{tryC}_j'$}
+                 node[dot]      {}         
+                 ;
+
+    % We connect the two transactions by a snaky line from the last operation
+    % of the first transaction to the first operation of the second
+    % transaction. The line has class retry.
+    \draw[retry] (ab) -- (st);
+
+    \draw
+          (2,-2) node[aop]      {$\mathit{start}_j$}
+                 node[dot]      {} 
+                 node[tid]      {$T_k$}
+
+      -- ++(1,0) node[aop]      {$w_k(x)v_k$}
+                 node[inv] (in3){}
+
+         ++(3.25,0) node[aop]   {$\to\!\mathit{ok}_k$}
+                 node[res] (re3){}
+
+         % In the third transaction we want the text to be below the point on
+         % the line, so we change aop to bop.
+      -- ++(1,0) node[bop]      {$\mathit{tryC}_k$}
+                 node[dot] (co) {}         
+                 ;
+
+    \draw[wait] (in3) -- (re3);
+   
+    % We draw another happens before relation, but this one is inclining rather
+    % then declining, so we use squiggleup instead of squiggle.
+    \draw[hb] (co) \squiggleup (r);
+
+    % Axis with numbers on it.
+    \axis{0}{12}{-3}
+
+    % Alternatively, just a simple axis with just an arrow:
+    % \simpleaxis{0}{12}{-3}
+\end{tikzpicture}
+
+
+\end{document}
