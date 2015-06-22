@@ -1,0 +1,47 @@
+% Copyright 2015 Konrad Siek <konrad.siek@gmail.com> 
+
+\tikzset{
+        % dot
+        dot/.style={draw, circle, fill=white, inner sep=1pt, outer sep=0pt},
+        % poké ball
+        cir/.style={draw, circle, fill opacity=0, inner sep=2pt, outer sep=0pt},
+        % diamond
+        dia/.style={draw, diamond, fill opacity=0, inner sep=2pt, outer sep=0pt},
+        % half dot, open (invoke)
+        inv/.style={dot, semicircle, shape border rotate=90, scale=.75},
+        % half dot, close (response)
+        res/.style={dot, semicircle, shape border rotate=270, scale=.75},
+        % above operation
+        aop/.style={above=5pt, anchor=base west, scale=.75},
+        % below operation
+        bop/.style={below, anchor=north west, scale=.75},
+        % annotation (below)
+        not/.style={below, anchor=north west, scale=.7, gray},
+        % transaction ID
+        tid/.style={left=14pt, below},  
+        % happens before arrow
+        hb/.style={-latex, very thin, gray}, %, dash pattern=on 3pt off 1pt},
+        wait/.style={very thin, dash pattern=on 3pt off 1pt},
+        % retry arrow
+        retry/.style={-latex, draw, very thin, decorate, decoration={snake, amplitude=.4mm, segment length=2mm, post length=1mm}, gray} 
+        %, dash pattern=on 3pt off 1pt}
+}
+
+% line definition for happens before arrow
+\def\squiggle {.. controls +(270:.85) and +(90:0.85) ..}
+\def\squiggleup {.. controls +(90:.85) and +(270:0.85) ..}
+
+% arrow-only axis
+% arguments: start x, end x, y 
+\def\simpleaxis#1#2#3{%
+    \draw[->] (#1cm,#3cm) -- (#2cm+0.6cm,#3cm);%
+}
+
+% axis with notches
+% arguments: start x, end x, y 
+\def\axis#1#2#3{%
+    \simpleaxis{#1}{#2}{#3}%
+    \foreach \i in {#1,...,#2}%
+        \draw (\i, #3cm-1pt) -- (\i, #3cm+1pt)%
+              node[below=3pt, anchor=north, scale=.65] {{\i}};%
+}
