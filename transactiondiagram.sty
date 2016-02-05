@@ -52,6 +52,7 @@
 %            text node position (above/below), 
 %            color config, 
 %            text over first node, text over second node
+% named in hommage to GrimithR of Youtube fame
 \def\getrect#1#2#3#4#5#6#7{
     \node (#4-#1) at ([yshift=#3]#1){};
     \node (#4-#2) at ([yshift=#3]#2){};
@@ -67,7 +68,7 @@
 %            text node position (above/below),
 %            color config,
 %            text over node
-\def\getsmallrect#1#2#3#4#5{
+\def\getslimrect#1#2#3#4#5{
     \node [dot, opacity=0] (#3-#1) at ([yshift=#2]#1){};
     \fill [#4] (#1.east) rectangle (#3-#1.west);
     \draw[dashed] (#1.east) -- (#3-#1.east); 
