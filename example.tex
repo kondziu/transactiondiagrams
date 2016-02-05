@@ -53,9 +53,10 @@
          ++(1,0) node[aop]      {$\to\!\mathit{ok}_i$}
                  node[res] (re) {}
 
-            % The last operation is also typical.
+            % We add a note below the last operation.
       -- ++(1,0) node[aop]      {$\mathit{tryC}_i$}
                  node[dot]      {}         
+                 node[not]      {this is a note}
                  ;
 
     % Next, we fill the gap between the invocation event at node in and the
@@ -76,7 +77,7 @@
                  node[res] (re2){}
 
       -- ++(1.5,0) node[aop]    {$\mathit{tryC}_j$}
-                 node[dot] (ab) {}         
+                 node[dot] (ab) {}       
                  ;
 
     % A dashed line between two events of a split operation
@@ -97,8 +98,11 @@
       -- ++(1,0) node[aop]      {$r_j'(x)v_k$}
                  node[dot] (r)  {}
 
+      % In this transaction we add a note below the last operation. We use
+      % mutlinot to split the text into several lines.
       -- ++(1,0) node[aop]      {$\mathit{tryC}_j'$}
-                 node[dot]      {}         
+                 node[dot] (n1) {}         
+                 node[not]      {\multinot{this is a \\ 2-line note}}
                  ;
 
     % We connect the two transactions by a snaky line from the last operation

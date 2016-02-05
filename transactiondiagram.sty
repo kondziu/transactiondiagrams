@@ -2,9 +2,9 @@
 
 \tikzset{
         % dot
-        dot/.style={draw, circle, fill=white, inner sep=1pt, outer sep=0pt},
+        dot/.style={draw, circle, fill=white, inner sep=2pt, outer sep=0pt},
         % poké ball
-        cir/.style={draw, circle, fill opacity=0, inner sep=2pt, outer sep=0pt},
+        cir/.style={draw, circle, fill opacity=0, inner sep=1pt, outer sep=0pt},
         % diamond
         dia/.style={draw, diamond, fill opacity=0, inner sep=2pt, outer sep=0pt},
         % half dot, open (invoke)
@@ -22,6 +22,7 @@
         % happens before arrow
         hb/.style={-latex, very thin, gray}, %, dash pattern=on 3pt off 1pt},
         wait/.style={very thin, dash pattern=on 3pt off 1pt},
+        dotdotdot/.style={dotted},
         % retry arrow
         retry/.style={-latex, draw, very thin, decorate, decoration={snake, amplitude=.4mm, segment length=2mm, post length=1mm}, gray} 
         %, dash pattern=on 3pt off 1pt}
@@ -44,4 +45,38 @@
     \foreach \i in {#1,...,#2}%
         \draw (\i, #3cm-1pt) -- (\i, #3cm+1pt)%
               node[below=3pt, anchor=north, scale=.65] {{\i}};%
+}
+
+% draw a rectangle marking a distance between two nodes
+% arguments: first node, second node, height, 
+%            text node position (above/below), 
+%            color config, 
+%            text over first node, text over second node
+\def\getrect#1#2#3#4#5#6#7{
+    \node (#4-#1) at ([yshift=#3]#1){};
+    \node (#4-#2) at ([yshift=#3]#2){};
+    \fill [#5] (#1.center) rectangle (#4-#2);
+    \draw[dashed] (#1.center) -- (#4-#1.center);  
+    \draw[dashed] (#2.center) -- (#4-#2.center);
+    \node[#4] at (#4-#1) {#6};
+    \node[#4] at (#4-#2) {#7};
+}
+
+% draw a slim rectanagle over one node
+% arguments: node, height,
+%            text node position (above/below),
+%            color config,
+%            text over node
+\def\getsmallrect#1#2#3#4#5{
+    \node [dot, opacity=0] (#3-#1) at ([yshift=#2]#1){};
+    \fill [#4] (#1.east) rectangle (#3-#1.west);
+    \draw[dashed] (#1.east) -- (#3-#1.east); 
+    \draw[dashed] (#1.west) -- (#3-#1.west);
+    \node[#3] at (#3-#1) {#5};
+}
+
+% split the text of a node within multiple lines
+% arguments: text, with // delimiting lines
+\def\multinot#1{
+    \begin{tabular}{l}#1\end{tabular}
 }
