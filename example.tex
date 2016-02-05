@@ -10,6 +10,7 @@
 
 \begin{document}
 
+% This is an example showing the basic features.
 \begin{tikzpicture}
      % Transaction, basically a line starting at point (0,0) and ending at
      % point (5,0). It contains four operations.
@@ -135,6 +136,80 @@
 
     % Axis with numbers on it.
     \axis{0}{12}{-3}
+
+    % Alternatively, just a simple axis with just an arrow:
+    % \simpleaxis{0}{12}{-3}
+\end{tikzpicture}
+
+\vspace{2cm}
+
+% This is an example of using rectangles to indicate stretches of time. It
+% shows two transactions, where one is longer than the other, and the rectangle
+% is drawn over the longer of the two to emphasise the difference.
+\begin{tikzpicture}
+     % The transaction is pretty ordinary, but we add an unmarked node (without
+     % any style) and name nodes b0, b1, and b2. The umarked node will give a
+     % rectangle a place to "attach".
+     \draw
+           (0,0) node[bop]      {$\mathit{start}_i$}
+                 node[dot] (b0) {} 
+                 node[tid]      {$T_i$}
+
+      -- ++(2,0) node      (b1) {}
+
+      -- ++(2,0) node[aop]      {$r_i(x)u_i$}
+                 node[dot]      {}
+
+      -- ++(2,0) node[aop]      {$w_i(x)v_i$}
+                 node[dot]      {}
+
+      % The unmarked node.
+
+      -- ++(2,0) node[aop]      {$\mathit{tryC}_i$}
+                 node[dot] (b2) {}         
+                 ;
+
+     % The first rectangle we mark is going to show the width of the difference
+     % between the two transactions. Hence we put down a rectangle starting at
+     % node b0 and ending at b1.
+     \getrect{b0}{b1}
+             % The node will be 1cm high and go up. If it were going down it'd
+             % be defined as {-1cm}{below}.
+             {1cm}{above}
+             % The rectangle is defined to be hatched using gray perpendicular
+             % lines, as per standard tikz magic.
+             {black, pattern=north west lines, pattern color=gray}
+             % At the top of the rectangle there are two text labels, one at
+             % the beginning saying $\delta_1$, and one at the end saying
+             % $\delta_2$.
+             {$\delta_1$}{$\delta_2$};
+
+     % We also draw a smaller rectangle at the end. Since there is no
+     % difference at the end, we indicate that by drawing a slim rectangle over
+     % a sinlge node, b2. 
+     \getslimrect{b2}
+             {1cm}{above}
+             {black, pattern=north west lines, pattern color=gray}
+             {$\delta_3$};
+
+    \draw
+           (2,-1) node[aop]      {$\mathit{start}_i$}
+                 node[dot]      {} 
+                 node[tid]      {$T_i'$}
+
+      -- ++(2,0) node[aop]      {$r_i(x)u_i$}
+                 node[dot]      {}
+
+      -- ++(2,0) node[aop]      {$w_i(x)v_i$}
+                 node[dot]      {}
+
+      -- ++(2,0) node[aop]      {$\mathit{tryC}_i$}
+                 node[dot]      {}         
+                 ;
+
+
+
+    \axis{0}{9}{-2}
 
     % Alternatively, just a simple axis with just an arrow:
     % \simpleaxis{0}{12}{-3}
